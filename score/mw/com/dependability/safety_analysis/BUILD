@@ -36,6 +36,7 @@ failure_modes(
     name = "mw_com_failure_modes",
     srcs = ["failure_modes.trlc"],
     target_compatible_with = ["@platforms//os:linux"],
+    deps = ["//score/mw/com/dependability/architectural_design:software_architectural_design"],
 )
 
 fault_trees(

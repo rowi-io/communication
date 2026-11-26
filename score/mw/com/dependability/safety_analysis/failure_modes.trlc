@@ -13,6 +13,7 @@
 package Communication
 
 import ScoreReq
+import mw_com_api
 
 section "LoLa" {
 
@@ -692,6 +693,72 @@ section "LoLa" {
         }
 
         section "Generic Proxy" {
+
+            section "Create" {
+
+                ScoreReq.FailureMode GenericProxyCreateFailsForOfferedService {
+                    guidewords = [ ScoreReq.Guideword.LossOfFunction ]
+                    description = "Creating a generic proxy with a valid handle fails, although the service instance is offered and not being stop offered."
+                    failureeffect = "No communication via this generic proxy will happen, thus no information can be exchanged."
+                    version = 1
+                    safety = ScoreReq.Asil.B
+                    interface = [mw_com_api.score_mw_com_mw_com_binding_independent_generic_proxy_and_service_elements_GenericProxy_Create]
+                }
+
+                ScoreReq.FailureMode GenericProxyCreateReturnsIncompleteEventMap {
+                    guidewords = [ ScoreReq.Guideword.PartialFunction ]
+                    description = "Creating a generic proxy succeeds, but an event provided by the service instance is missing in its event map."
+                    failureeffect = "The user is not aware of the missing event and misses its data."
+                    version = 1
+                    safety = ScoreReq.Asil.B
+                    interface = [mw_com_api.score_mw_com_mw_com_binding_independent_generic_proxy_and_service_elements_GenericProxy_Create]
+                }
+
+                ScoreReq.FailureMode GenericProxyCreateReturnsNonexistentEvents {
+                    guidewords = [ ScoreReq.Guideword.UnintendedFunction ]
+                    description = "Creating a generic proxy succeeds, but its event map contains an event that is not provided by the service instance."
+                    failureeffect = "The user could take wrong actions based on a not existing event."
+                    version = 1
+                    safety = ScoreReq.Asil.B
+                    interface = [mw_com_api.score_mw_com_mw_com_binding_independent_generic_proxy_and_service_elements_GenericProxy_Create]
+                }
+
+                ScoreReq.FailureMode GenericProxyCreateBindsToWrongResources {
+                    guidewords = [ ScoreReq.Guideword.Wrong, ScoreReq.Guideword.Corrupted ]
+                    description = "Creating a generic proxy succeeds, but the proxy or one of its events is bound to the resources of a wrong service instance or a wrong service element."
+                    failureeffect = "Data of another service instance or service element is read as valid data."
+                    version = 1
+                    safety = ScoreReq.Asil.B
+                    interface = [mw_com_api.score_mw_com_mw_com_binding_independent_generic_proxy_and_service_elements_GenericProxy_Create]
+                }
+
+                ScoreReq.FailureMode GenericProxyCreateReturnsUnusableProxy {
+                    guidewords = [ ScoreReq.Guideword.UnintendedFunction ]
+                    description = "Creating a generic proxy succeeds, although the proxy or one of its events is not usable."
+                    failureeffect = "The user relies on a proxy that never delivers."
+                    version = 1
+                    safety = ScoreReq.Asil.B
+                    interface = [mw_com_api.score_mw_com_mw_com_binding_independent_generic_proxy_and_service_elements_GenericProxy_Create]
+                }
+
+                ScoreReq.FailureMode GenericProxyCreateTakesTooLong {
+                    guidewords = [ ScoreReq.Guideword.DelayedFunction ]
+                    description = "Creating a generic proxy returns only after a time exceeding the expectation of the user."
+                    failureeffect = "Startup or recovery of the calling application exceeds its time budget."
+                    version = 1
+                    safety = ScoreReq.Asil.B
+                    interface = [mw_com_api.score_mw_com_mw_com_binding_independent_generic_proxy_and_service_elements_GenericProxy_Create]
+                }
+
+                ScoreReq.FailureMode GenericProxyCreateKeepsResourcesAfterFailure {
+                    guidewords = [ ScoreReq.Guideword.ExceedingFunction ]
+                    description = "Creating a generic proxy fails, but resources acquired before the failure are not released."
+                    failureeffect = "The opened usage marker file, the shared flock and the opened shared memory stay held, which could prevent the provider from cleaning up or re-offering the service and exhaust system resources."
+                    version = 1
+                    safety = ScoreReq.Asil.B
+                    interface = [mw_com_api.score_mw_com_mw_com_binding_independent_generic_proxy_and_service_elements_GenericProxy_Create]
+                }
+            }
 
             section "Generic access to Generic Proxy Events" {
 
